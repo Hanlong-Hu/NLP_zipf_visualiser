@@ -1,0 +1,87 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Lato', 'Nunito', sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Header & Navigation */
+header {
+  background: #333;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+.menu-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-lists {
+  display: flex;
+  list-style: none;
+}
+
+.nav-list {
+  padding: 0 1rem;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffca28; /* Python yellowish color */
+}
+
+/* Main Container */
+.container {
+  width: 80%;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h1 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+/* Tech List Styling (from home.html) */
+.tech-lists {
+  list-style: none;
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tech {
+  background: #2c3e50;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
