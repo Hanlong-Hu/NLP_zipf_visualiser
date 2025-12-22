@@ -4,9 +4,9 @@ Text analyser website that can be run or deployed onto remote server.
 
 ## Description
 ### Goals
-- [] User input box for text
-- [] Word count, show counter for words not in dictionary
-- [] 
+- [ ] User input box for text
+- [ ] Word count, show counter for words not in dictionary
+- [ ] 
 
 ## Getting Started
 
