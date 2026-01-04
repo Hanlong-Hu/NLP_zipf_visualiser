@@ -5,6 +5,14 @@
     <div>
       <textarea rows="25" name="content">{{ content }}</textarea>
     </div>
+    <div class="options">
+      <label>
+        <input type="checkbox" name="case_sensitive"> Case Sensitive
+      </label>
+      <label>
+        <input type="checkbox" name="remove_stop_words"> Remove Stop Words
+      </label>
+    </div>
     <div>
       <input type="submit" class="btn" value="Process Text" />
     </div>
@@ -13,7 +21,8 @@
   {% if word_count is defined %}
   <div class="result">
       <h2>Analysis Results</h2>
-      <p>Number of words: {{ word_count }}</p>
+      <p>Total words: {{ word_count }}</p>
+      <p>Unique words: {{ unique_word_count }}</p>
   </div>
   {% endif %}
 </div>
