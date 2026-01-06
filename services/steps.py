@@ -27,3 +27,12 @@ def remove_stop_words_step(words):
     """Removes common stop words."""
     stop_words = {"the", "is", "at", "which", "on", "a", "an", "and", "it"}
     return [w for w in words if w.lower() not in stop_words]
+
+def create_exclusion_step(words_to_exclude):
+    exclusion_set = set(w.lower() for w in words_to_exclude)
+    
+    def filter_step(words):
+        return [w for w in words if w.lower() not in exclusion_set]
+    
+    # such that processor.py runs filter_step(data)
+    return filter_step

@@ -3,8 +3,10 @@
   <h1>Text Analyzer</h1>
   <form action="{{ url_for('post') }}" method="POST">
     <div>
-      <textarea rows="25" name="content">{{ content }}</textarea>
+      <textarea name="content" placeholder="Paste your text here...">{{ content }}</textarea>
     </div>
+    
+    <label class="options-label"> Text Analysis Options </label>
     <div class="options">
       <label>
         <input type="checkbox" name="case_sensitive"> Case Sensitive
@@ -12,17 +14,30 @@
       <label>
         <input type="checkbox" name="remove_stop_words"> Remove Stop Words
       </label>
+      <div style="grid-column: 1 / -1;">
+        <label for="words_to_exclude" style="margin-bottom: 0.25rem;">Words to exclude (comma separated)</label>
+        <input type="text" id="words_to_exclude" name="words_to_exclude" placeholder="e.g. apple, banana">
+      </div>
     </div>
-    <div>
-      <input type="submit" class="btn" value="Process Text" />
+
+    <div style="margin-top: 1.5rem;">
+      <input type="submit" class="btn" value="Analyze Text" />
     </div>
   </form>
 
   {% if word_count is defined %}
   <div class="result">
       <h2>Analysis Results</h2>
-      <p>Total words: {{ word_count }}</p>
-      <p>Unique words: {{ unique_word_count }}</p>
+      <div class="metrics-grid">
+          <div class="metric-card">
+              <span class="metric-label">Total Words</span>
+              <span class="metric-value">{{ word_count }}</span>
+          </div>
+          <div class="metric-card">
+              <span class="metric-label">Unique Words</span>
+              <span class="metric-value">{{ unique_word_count }}</span>
+          </div>
+      </div>
   </div>
   {% endif %}
 </div>
