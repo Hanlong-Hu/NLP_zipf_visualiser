@@ -10,8 +10,12 @@ def get_unique_word_count(words):
     return len(set(words))
 
 def get_most_frequent_words(words, n=10):
-    """Returns the n most frequent words."""
-    return Counter(words).most_common(n)
+    """Returns the n most frequent words in a format suitable for charts."""
+    counts = Counter(words).most_common(n)
+    return {
+        "labels": [word for word, count in counts],
+        "values": [count for word, count in counts]
+    }
 
 def get_character_count(text):
     """Returns total number of characters in raw text."""

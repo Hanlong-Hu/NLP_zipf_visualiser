@@ -21,37 +21,79 @@ def about():
 def post():
     name = 'Text Analyzer'
     if request.method == 'GET':
-        return render_template('post.html', name = name, title = name)
+        # Default options for a clean state
+        options = {
+            'remove_punctuation': True,
+            'filter_alpha': False,
+            'case_sensitive': False,
+            'remove_stop_words': False,
+            'words_to_exclude': ''
+        }
+        return render_template('post.html', name = name, title = name, options=options)
     if request.method == 'POST':
         content = request.form['content']
         
-        # Build the pipeline based on toggles
-        steps = [filter_alpha_step] # Basic cleaning always
-        
-        if request.form.get('case_sensitive') != 'on':
-            steps.append(lowercase_step)
-            
-        if request.form.get('remove_stop_words') == 'on':
-            steps.append(remove_stop_words_step)
+        # Capture options for maintaining state
+        options = {
+            'remove_punctuation': request.form.get('remove_punctuation') == 'on',
+            'filter_alpha': request.form.get('filter_alpha') == 'on',
+            'case_sensitive': request.form.get('case_sensitive') == 'on',
+            'remove_stop_words': request.form.get('remove_stop_words') == 'on',
+            'words_to_exclude': request.form.get('words_to_exclude', '')
+        }
 
-        if request.form.get('words_to_exclude'):
-            words_to_exclude = request.form.get('words_to_exclude').split(',')
+        # Build the pipeline based on toggles
+        # Each step is now a tuple: (snapshot_name, function)
+        steps = [('raw', tokenize_step)]
+        
+        if options['remove_punctuation']:
+            steps.append(('cleaned_punct', remove_punctuation_step))
+
+        if options['filter_alpha']:
+            steps.append(('cleaned_alpha', filter_alpha_step))
+        
+        if not options['case_sensitive']:
+            steps.append(('normalized', lowercase_step))
+            
+        # We'll take a snapshot here specifically for "before stop words" comparison
+        # if the previous step wasn't already one of the others
+        steps.append(('before_stop_words', lambda x: x)) 
+
+        if options['remove_stop_words']:
+            steps.append(('after_stop_words', remove_stop_words_step))
+
+        if options['words_to_exclude']:
+            words_to_exclude = options['words_to_exclude'].split(',')
             generated_function = create_exclusion_step(words_to_exclude)
-            steps.append(generated_function)
+            steps.append(('final', generated_function))
+        else:
+            # If no exclusion, the last step is 'final'
+            steps.append(('final', lambda x: x))
 
         # Process the text
-        processed_words = run_pipeline(content, steps)
+        processed_words, snapshots = run_pipeline(content, steps)
         
         # Get metrics
         word_count = get_word_count(processed_words)
         unique_word_count = get_unique_word_count(processed_words)
         
+        # Prepare frequency data for comparison
+        # We'll provide 'before_stop_words' and 'final' as the primary comparison points
+        from services.metrics import get_most_frequent_words
+        chart_data = {
+            'before': get_most_frequent_words(snapshots.get('before_stop_words', [])),
+            'after': get_most_frequent_words(snapshots.get('final', []))
+        }
+        
+        
         return render_template('post.html', 
                                name=name, 
                                title=name, 
                                content=content, 
+                               options=options,
                                word_count=word_count,
-                               unique_word_count=unique_word_count)
+                               unique_word_count=unique_word_count,
+                               chart_data=chart_data)
         
         # return redirect(url_for('post'))
 

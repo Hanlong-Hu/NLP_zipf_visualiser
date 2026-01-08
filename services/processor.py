@@ -1,18 +1,19 @@
 # Runs the pipeline of the text analysis
-from services.steps import tokenize_step
 
 def run_pipeline(text, steps):
     """
-    Orchestrates the text processing pipeline.
+    Orchestrates the text processing pipeline and tracks intermediate states.
     :param text: Raw input string
-    :param steps: List of functions to apply to the tokens
-    :return: List of processed tokens
+    :param steps: List of tuples (name, function)
+    :return: Tuple of (final_data, snapshots)
     """
-    # Start with tokenization
-    data = tokenize_step(text)
+    data = text
+    snapshots = {}
     
     # Apply each step in the pipeline
-    for step in steps:
-        data = step(data)
-        
-    return data
+    for name, step_func in steps:
+        data = step_func(data)
+        if name:
+            snapshots[name] = data
+            
+    return data, snapshots
