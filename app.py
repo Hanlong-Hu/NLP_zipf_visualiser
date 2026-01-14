@@ -14,17 +14,17 @@ app = Flask(__name__)
 @app.route('/')
 def home ():
     techs = ['HTML', 'Flask', 'CSS', 'Python']
-    name = 'Text Analyzer'
+    name = 'NLP visualiser'
     return render_template('home.html', techs=techs, name=name, title='home')
 
 @app.route('/about')
 def about():
-    name = 'Text Analyzer'
+    name = 'NLP visualiser'
     return render_template('about.html', name = name, title = 'About Us')
 
 @app.route('/post', methods = ['GET', 'POST'])
 def post():
-    name = 'Text Analyzer'
+    name = 'NLP visualiser'
     if request.method == 'GET':
         # Default options for a clean state
         options = {
@@ -112,7 +112,7 @@ def post():
 
 @app.route('/examples', methods = ['GET'])
 def examples():
-    name = 'Text Analyzer'
+    name = 'NLP visualiser'
     corpora_dir = os.path.join(app.root_path, 'data', 'corpora')
     
     # 1. Get list of available files

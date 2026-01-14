@@ -2,16 +2,36 @@
 <div class="container">
   <h1>Welcome to {{name}}</h1>
   <p>
-    This application clean texts and analyse the number of word, characters and
-    most frequent words in the text. Check it out by click text analyzer at the
-    menu. You need the following technologies to build this web application:
+    The <strong>{{name}}</strong> is a robust web application designed for comprehensive text analysis and cleaning. It provides real-time metrics, including word counts, character counts, and advanced frequency analysis through interactive visualizations.
   </p>
-  <ul class="tech-lists">
-    {% for tech in techs %}
-    <li class="tech">{{tech}}</li>
 
-    {% endfor %}
-  </ul>
+  <div class="home-section">
+    <h2>The Stack</h2>
+    <p>This project is built using a modern Python-based web stack:</p>
+    <ul class="tech-lists">
+      <li class="tech"><strong>Python:</strong> The core language used for all text processing logic.</li>
+      <li class="tech"><strong>Flask:</strong> A lightweight WSGI web application framework for routing and server-side logic.</li>
+      <li class="tech"><strong>NLTK:</strong> The Natural Language Toolkit for advanced tokenization and stop-word filtering.</li>
+      <li class="tech"><strong>Jinja2:</strong> For dynamic HTML templating.</li>
+      <li class="tech"><strong>Chart.js:</strong> Powering the interactive Zipf's Law and frequency charts.</li>
+      <li class="tech"><strong>CSS:</strong> Custom responsive styling.</li>
+    </ul>
+  </div>
+
+  <div class="home-section">
+    <h2>Design Patterns</h2>
+    <p>To ensure maintainability and scalability, the application leverages several key design patterns:</p>
+    <ul>
+      <li>
+        <strong>Pipeline Pattern:</strong> The text processing engine is built as a flexible pipeline. You can dynamically add or remove processing steps (like lowercase conversion, punctuation removal, etc.) without affecting the overall structure.
+      </li>
+      <li>
+        <strong>Functional Step Pattern:</strong> Each transformation in the pipeline is a discrete, pure function. This modular approach makes testing and extending the processing logic straightforward.
+      </li>
+      <li>
+        <strong>MVC (Model-View-Controller):</strong> The application logic is separated into <code>services</code> (the Model/logic), <code>templates</code> (the View), and <code>app.py</code> (the Controller).
+      </li>
+    </ul>
+  </div>
 </div>
-
 {% endblock %}

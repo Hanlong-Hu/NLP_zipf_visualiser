@@ -1,8 +1,54 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="container">
   <h1>About {{name}}</h1>
-  <p>
-    TODO
-  </p>
+  
+  <section class="about-section">
+    <h2>Project Overview</h2>
+    <p>
+      The <strong>{{name}}</strong> is a tool designed for linguistic analysis and data preparation. It serves as a playground for understanding how text normalization impacts data metrics.
+    </p>
+  </section>
+
+  <section class="about-section">
+    <h2>Mathematical Foundations</h2>
+    <p>
+      The application utilizes <strong>Zipf's Law</strong> to visualize word frequency distribution. Zipf's law states that given some corpus of natural language utterances, the frequency of any word is inversely proportional to its rank in the frequency table.
+    </p>
+    <p>
+      Mathematically, this can be expressed as:
+      \[ f(k; s, N) = \frac{1/k^s}{\sum_{n=1}^{N} (1/n^s)} \]
+      Where:
+      <ul>
+        <li>\( k \) is the rank of the word.</li>
+        <li>\( s \) is the value of the exponent characterizing the distribution.</li>
+        <li>\( N \) is the number of elements.</li>
+      </ul>
+    </p>
+  </section>
+
+  <section class="about-section">
+    <h2>Pipeline Logic</h2>
+    <p>
+      The core processing pipeline follows a linear transformation model:
+      \[ T_{final} = S_n(S_{n-1}(...S_1(T_{raw})...)) \]
+      Each step \( S_i \) is a discrete transformation applied to the text tokens, allowing for modular and testable code.
+    </p>
+  </section>
+
+  <section class="about-section">
+    <h2>Documentation</h2>
+    <h3>How it works</h3>
+    <ol>
+      <li><strong>Tokenization:</strong> Raw text is broken down into individual words (tokens) using NLTK's <code>word_tokenize</code>.</li>
+      <li><strong>Cleaning:</strong> Depending on user selection, punctuation is removed, and non-alphabetic characters are filtered.</li>
+      <li><strong>Normalization:</strong> Text is optionally converted to lowercase to ensure uniform counting.</li>
+      <li><strong>Stop Word Removal:</strong> Common "filler" words (e.g., "the", "is", "at") can be removed to focus on meaningful content.</li>
+      <li><strong>Metrics Generation:</strong> The final processed list of words is used to calculate counts and frequency distributions.</li>
+    </ol>
+  </section>
 </div>
+
+<!-- MathJax for LaTeX Support -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 {% endblock %}

@@ -5,46 +5,52 @@ A Flask-based web application designed to provide detailed text analysis and met
 ## Description
 This project allows users to input blocks of text and receive immediate feedback on word counts, character counts, and frequency analysis. It features a flexible text-processing pipeline to handle normalization, case sensitivity, and stop-word filtering.
 
-### Goals
-- [x] Basic text input interface and word count.
-- [x] Apostrophe preservation in normalization.
-- [x] Implement a modular **Pipeline Pattern** for text processing.
-- [x] Add user toggles for **Case Sensitivity** and **Stop Words**.
-- [x] Display advanced metrics: Unique words and Most Frequent words.
-- [ ] Dictionary check for "Words not in dictionary" (Future goal).
-- [ ] Type token ratio [site with example zipf's plotted distirbution](https://medium.com/@rajeswaridepala/empirical-laws-ttr-cc9f826d304d)
-- [ ] use zipf as a option to generate stop words
-- [x] show a zipf graph
-- [x] show number of characters
-## Technical Implementation Steps
-To achieve the remaining goals, the following steps will be taken:
-1. **Refactor Processing**: Transition from static functions to a `TextPipeline` class or higher-order function.
-2. **UI Update**: Modify `templates/post.html` to include toggle switches for analysis options.
-3. **Backend Integration**: Update `app.py` to capture form toggles and configure the pipeline dynamically.
-4. **Data Enrichment**: Integrate a standard stop-word list (or NLTK) for better filtering accuracy.
+## Technical Implementation
+The application is built with a modular architecture:
+- **Pipeline Pattern:** Orchestrates the text processing steps.
+- **Service Layer:** Separates metrics calculation and text processing logic from the web routing.
+- **Visualization:** Uses Chart.js for interactive frequency and Zipf's Law distribution charts.
 
 ## Getting Started
 
-### Dependencies
-- Python 3.8+
-- Flask
-- (Optional) NLTK for advanced language processing
+### Prerequisites
+- Python 3.12+ (tested on 3.12)
+- [Virtualenv](https://virtualenv.pypa.io/en/latest/) (recommended)
 
-### Installing
-1. Clone the repository.
-2. Install dependencies:
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd flask_project
+   ```
+
+2. **Set up a virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-### Executing program
-1. Run the Flask development server:
+### Running the Application
+
+1. **Start the Flask server:**
    ```bash
    python app.py
    ```
-2. Navigate to `http://127.0.0.1:5000` in your browser.
 
+2. **Access the web interface:**
+   Open your browser and navigate to `http://127.0.0.1:5000`.
+
+
+## Optional:
+   Local txt files will appear as a dropdown option under data/corpora for backend processing if html request sizes become too large
 ## Acknowledgments
-* Regex patterns for text normalization.
-* Flask documentation for web routing.
+* NLTK for robust natural language processing.
+* Chart.js for data visualization.
+* MathJax for LaTeX rendering.
 

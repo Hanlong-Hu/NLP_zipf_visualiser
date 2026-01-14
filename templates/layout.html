@@ -13,9 +13,9 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {% if title %}
-    <title>Text Analyzer - {{ title}}</title>
+    <title>NLP visualiser - {{ title}}</title>
     {% else %}
-    <title>Text Analyzer</title>
+    <title>NLP visualiser</title>
     {% endif %}
   </head>
 
@@ -34,7 +34,7 @@
           </li>
           <li class="nav-list">
             <a class="nav-link active" href="{{ url_for('post') }}"
-              >Text Analyzer</a>
+              >Text Input</a>
           </li>
           <li class="nav-list">
               <a class="nav-link active" href="{{ url_for('examples') }}">Examples</a>
