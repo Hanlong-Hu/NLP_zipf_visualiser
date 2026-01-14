@@ -110,6 +110,96 @@ def post():
         
         # return redirect(url_for('post'))
 
+@app.route('/examples', methods = ['GET'])
+def examples():
+    name = 'Text Analyzer'
+    corpora_dir = os.path.join(app.root_path, 'data', 'corpora')
+    
+    # 1. Get list of available files
+    try:
+        files = sorted([f for f in os.listdir(corpora_dir) if f.endswith('.txt')])
+    except FileNotFoundError:
+        files = []
+    
+    # 2. Get the selected file from query param
+    selected_file = request.args.get('file', files[0] if files else None)
+    
+    # 3. Capture options from GET parameters or set defaults
+    if not request.args:
+        options = {
+            'remove_punctuation': True,
+            'filter_alpha': False,
+            'case_sensitive': False,
+            'remove_stop_words': False,
+            'words_to_exclude': ''
+        }
+    else:
+        options = {
+            'remove_punctuation': request.args.get('remove_punctuation') == 'on',
+            'filter_alpha': request.args.get('filter_alpha') == 'on',
+            'case_sensitive': request.args.get('case_sensitive') == 'on',
+            'remove_stop_words': request.args.get('remove_stop_words') == 'on',
+            'words_to_exclude': request.args.get('words_to_exclude', '')
+        }
+
+    content = ""
+    if selected_file:
+        file_path = os.path.join(corpora_dir, selected_file)
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+        except Exception as e:
+            content = f"Error reading file: {str(e)}"
+
+    # 4. Build the pipeline based on options
+    steps = [('raw', tokenize_step)]
+    
+    if options['remove_punctuation']:
+        steps.append(('cleaned_punct', remove_punctuation_step))
+
+    if options['filter_alpha']:
+        steps.append(('cleaned_alpha', filter_alpha_step))
+    
+    if not options['case_sensitive']:
+        steps.append(('normalized', lowercase_step))
+        
+    steps.append(('before_stop_words', lambda x: x)) 
+
+    if options['remove_stop_words']:
+        steps.append(('after_stop_words', remove_stop_words_step))
+
+    if options['words_to_exclude']:
+        words_to_exclude = options['words_to_exclude'].split(',')
+        generated_function = create_exclusion_step(words_to_exclude)
+        steps.append(('final', generated_function))
+    else:
+        steps.append(('final', lambda x: x))
+
+    # Process the text
+    processed_words, snapshots = run_pipeline(content, steps)
+    
+    # 5. Prepare metrics for visualization
+    from services.metrics import get_most_frequent_words, get_zipf_data
+    chart_data = {
+        'before': get_most_frequent_words(snapshots.get('before_stop_words', []), n=50),
+        'after': get_most_frequent_words(snapshots.get('final', []), n=50)
+    }
+    
+    zipf_data = {
+        'before': get_zipf_data(snapshots.get('before_stop_words', [])),
+        'after': get_zipf_data(snapshots.get('final', []))
+    }
+    
+    return render_template('examples.html', 
+                           name=name, 
+                           title="Corpora Examples", 
+                           files=files, 
+                           selected_file=selected_file,
+                           options=options,
+                           chart_data=chart_data,
+                           zipf_data=zipf_data)
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

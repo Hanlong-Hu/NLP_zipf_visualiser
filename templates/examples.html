@@ -1,74 +1,62 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="container">
-  <h1>Text Analyzer</h1>
-  <form action="{{ url_for('post') }}" method="POST">
-    <div>
-      <textarea name="content" placeholder="Paste your text here...">{{ content }}</textarea>
-    </div>
-    
-    <label class="options-label"> Text Analysis Options </label>
-    <div class="options">
-      <div class="toggle-group">
-        <label class="switch">
-          <input type="checkbox" name="remove_punctuation" {{ 'checked' if options.remove_punctuation }}>
-          <span class="slider round"></span>
-        </label>
-        <span>Remove Punctuation</span>
-      </div>
-      <div class="toggle-group">
-        <label class="switch">
-          <input type="checkbox" name="filter_alpha" {{ 'checked' if options.filter_alpha }}>
-          <span class="slider round"></span>
-        </label>
-        <span>Filter Non-Alphabetic</span>
-      </div>
-      <div class="toggle-group">
-        <label class="switch">
-          <input type="checkbox" name="case_sensitive" {{ 'checked' if options.case_sensitive }}>
-          <span class="slider round"></span>
-        </label>
-        <span>Case Sensitive</span>
-      </div>
-      <div class="toggle-group">
-        <label class="switch">
-          <input type="checkbox" name="remove_stop_words" {{ 'checked' if options.remove_stop_words }}>
-          <span class="slider round"></span>
-        </label>
-        <span>Remove Stop Words</span>
-      </div>
-      <div style="grid-column: 1 / -1; margin-top: 0.5rem;">
-        <label for="words_to_exclude" style="display: block; margin-bottom: 0.25rem; font-weight: normal;">Words to exclude (comma separated)</label>
-        <input type="text" id="words_to_exclude" name="words_to_exclude" placeholder="e.g. apple, banana" value="{{ options.words_to_exclude }}">
-      </div>
-    </div>
+  <h1>Corpora Examples</h1>
+  
+  <div class="example-selector" style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+    <form action="{{ url_for('examples') }}" method="GET" id="corpusForm">
+        <div style="margin-bottom: 1.5rem;">
+            <label for="fileSelect" style="display: block; margin-bottom: 0.5rem; font-weight: bold; color: #2c3e50;">Select a Book to Analyze:</label>
+            <select name="file" id="fileSelect" onchange="this.form.submit()" style="width: 100%; padding: 0.75rem; border-radius: 4px; border: 1px solid #ced4da; font-size: 1rem; cursor: pointer;">
+                {% for file in files %}
+                    <option value="{{ file }}" {% if file == selected_file %}selected{% endif %}>{{ file }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <div style="margin-top: 1.5rem;">
-      <input type="submit" class="btn" value="Analyze Text" />
-    </div>
-  </form>
+        <label class="options-label"> Text Analysis Options </label>
+        <div class="options">
+          <div class="toggle-group">
+            <label class="switch">
+              <input type="checkbox" name="remove_punctuation" onchange="this.form.submit()" {{ 'checked' if options.remove_punctuation }}>
+              <span class="slider round"></span>
+            </label>
+            <span>Remove Punctuation</span>
+          </div>
+          <div class="toggle-group">
+            <label class="switch">
+              <input type="checkbox" name="filter_alpha" onchange="this.form.submit()" {{ 'checked' if options.filter_alpha }}>
+              <span class="slider round"></span>
+            </label>
+            <span>Filter Non-Alphabetic</span>
+          </div>
+          <div class="toggle-group">
+            <label class="switch">
+              <input type="checkbox" name="case_sensitive" onchange="this.form.submit()" {{ 'checked' if options.case_sensitive }}>
+              <span class="slider round"></span>
+            </label>
+            <span>Case Sensitive</span>
+          </div>
+          <div class="toggle-group">
+            <label class="switch">
+              <input type="checkbox" name="remove_stop_words" onchange="this.form.submit()" {{ 'checked' if options.remove_stop_words }}>
+              <span class="slider round"></span>
+            </label>
+            <span>Remove Stop Words</span>
+          </div>
+          <div style="grid-column: 1 / -1; margin-top: 0.5rem;">
+            <label for="words_to_exclude" style="display: block; margin-bottom: 0.25rem; font-weight: normal;">Words to exclude (comma separated)</label>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="words_to_exclude" name="words_to_exclude" placeholder="e.g. apple, banana" value="{{ options.words_to_exclude }}" style="flex-grow: 1;">
+                <input type="submit" value="Apply" class="btn" style="padding: 0.5rem 1rem;">
+            </div>
+          </div>
+        </div>
+    </form>
+  </div>
 
-  {% if word_count is defined %}
   <div class="result">
-      <h2>Analysis Results</h2>
-      <div class="metrics-grid">
-          <div class="metric-card">
-              <span class="metric-label">Total Words</span>
-              <span class="metric-value">{{ word_count }}</span>
-          </div>
-          <div class="metric-card">
-              <span class="metric-label">Unique Words</span>
-              <span class="metric-value">{{ unique_word_count }}</span>
-          </div>
-          <div class="metric-card">
-              <span class="metric-label">Total Characters</span>
-              <span class="metric-value">{{ char_count }}</span>
-          </div>
-          <div class="metric-card">
-              <span class="metric-label">Characters (no spaces)</span>
-              <span class="metric-value">{{ char_count_no_spaces }}</span>
-          </div>
-      </div>
-
+      <h2>Analysis Results: {{ selected_file }}</h2>
+      
       <div class="visualization-container">
           <div class="viz-header">
               <h3>Token Frequency</h3>
@@ -240,7 +228,6 @@
       updateChartWidth(currentData);
       document.getElementById('chartDataToggle').checked = true;
   </script>
-  {% endif %}
 </div>
-
 {% endblock %}
+
